@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Birthday Surprise 🎉</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      overflow-x: hidden;
+    }
+    h1 {
+      margin-top: 20px;
+      font-size: 2rem;
+      color: #e91e63;
+    }
+    .form-box {
+      margin-top: 30px;
+      background: #fff;
+      padding: 20px;
+      width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      z-index: 10;
+      position: relative;
+    }
+    input {
+      padding: 10px;
+      width: 90%;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 25px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 20px;
+      background: #ff4081;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #e91e63;
+      transform: scale(1.05);
+    }
+    #error {
+      color: red;
+      margin-top: 10px;
+    }
+    #surprise-box {
+      display: none;
+      margin-top: 30px;
+      position: relative;
+      z-index: 10;
+    }
+    .photo {
+      width: 200px;
+      border-radius: 15px;
+      margin: 15px auto;
+      display: block;
+    }
+    #message {
+      font-size: 1.5rem;
+      color: #e91e63;
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .gift-box {
+      width: 120px;
+      height: 120px;
+      margin: 30px auto 10px auto;
+      background: rgb(255, 192, 203);
+      border-radius: 15px;
+      position: relative;
+      cursor: pointer;
+      animation: bounce 1s infinite alternate;
+    }
+    .gift-box:before {
+      content: "🎁";
+      font-size: 90px;
+      position: absolute;
+      top: 10px;
+      left: 15px;
+    }
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-15px); }
+    }
+    #birthday-screen {
+      display: none; 
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+    #birthday-screen h1 {
+      font-size: 3rem;
+      color: #fff;
+      text-shadow: 0 0 15px #ff4081, 0 0 30px #000;
+      animation: glow 2s ease-in-out infinite alternate;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff4081, 0 0 20px #ff4081; }
+      to { text-shadow: 0 0 30px #fff, 0 0 50px #ff4081; }
+    }
+    .circle {
+      position: relative;
+      width: 400px;
+      height: 400px;
+      transform-style: preserve-3d;
+      animation: spin 20s linear infinite;
+      margin-bottom: 20px;
+    }
+    .circle img {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .circle img:hover {
+      transform: scale(1.2);
+    }
+    @keyframes spin {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+    #imgModal, #passwordModal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+    #imgModal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 15px;
+    }
+    #imgModal span, #passwordModal span {
+      position: absolute;
+      top: 20px; right: 40px;
+      color: white;
+      font-size: 40px;
+      cursor: pointer;
+    }
+    #bottomMessage {
+      margin-top: 20px;
+      font-size: 1.3rem;
+      color: #ffeb3b;
+      font-weight: bold;
+      text-shadow: 0 0 5px #000;
+    }
+    #backBtn, #backBtn1 {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 20px;
+      background: #2196f3;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    #backBtn:hover, #backBtn1:hover {
+      background: #0d47a1;
+      transform: scale(1.05);
+    }
+    #passwordModal .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    #passwordModal input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    .cake {
+      width: 200px;
+      margin: 0 auto 20px auto;
+      border-radius: 15px;
+      animation: bounce 1s infinite alternate;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎂 Birthday Surprise Portal 🎉</h1>
+
+  <div class="form-box">
+    <input type="text" id="name" placeholder="Enter Your Name">
+    <input type="date" id="dob">
+    <button id="check">Show Surprise</button>
+    <div id="error"></div>
+  </div>
+
+  <div id="surprise-box">
+    <h2 id="wish"></h2>
+    <img id="photo" class="photo" src="image6.jpg" alt="Birthday photo">
+    <p id="message"></p>
+    <div class="gift-box" id="giftBox"></div>
+    <p>🎁 Click the gift box to open your surprise 🎁</p>
+    <button id="backBtn1">⬅ Back</button>
+  </div>
+
+  <div id="birthday-screen">
+    <h1 id="finalWish"></h1>
+    <div class="circle" id="circle"></div>
+    <p id="bottomMessage"></p>
+    <button id="backBtn">⬅ Back</button>
+  </div>
+
+  <div id="imgModal">
+    <span id="closeModal">&times;</span>
+    <img id="modalImg">
+  </div>
+
+  <div id="passwordModal">
+    <span id="closePass">&times;</span>
+    <div class="modal-content">
+      <h3>🔒 Enter Password</h3>
+      <input type="password" id="passwordInput" placeholder="Enter Password">
+      <button id="submitPass">Unlock</button>
+      <p id="passError" style="color:red;"></p>
+    </div>
+  </div>
+
+  <audio id="music" loop></audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+  <script>
+    const checkBtn = document.getElementById("check");
+    const errorMsg = document.getElementById("error");
+    const surpriseBox = document.getElementById("surprise-box");
+    const wish = document.getElementById("wish");
+    const photo = document.getElementById("photo");
+    const message = document.getElementById("message");
+    const music = document.getElementById("music");
+    const birthdayScreen = document.getElementById("birthday-screen");
+    const finalWish = document.getElementById("finalWish");
+    const circle = document.getElementById("circle");
+    const bottomMessage = document.getElementById("bottomMessage");
+
+    const modal = document.getElementById("imgModal");
+    const modalImg = document.getElementById("modalImg");
+    const closeModal = document.getElementById("closeModal");
+
+    const passModal = document.getElementById("passwordModal");
+    const passInput = document.getElementById("passwordInput");
+    const passError = document.getElementById("passError");
+    const submitPass = document.getElementById("submitPass");
+    const closePass = document.getElementById("closePass");
+
+    const birthdays = [
+      { 
+        name: "lucy", 
+        dob: "2007-09-13", 
+        photo: "pic6.jpeg", 
+        message: "May your day be filled with joy, love, and endless surprises,Bas happy raho! 🎈🎁",
+        bg: "vikash-bg.jpg",
+        gallery: ["pic1.jpeg","pic2.jpeg","pic3.jpeg","pic4.jpeg","pic5.jpeg"],
+        bottom: "✨kat lo cake jaldi kato aur sabko ko khilaoooooooo meri lucy HAPPY WALA BIRTHDAY✨",
+        song: "happy-birthday-254480.mp3",
+        password: "lucy2007",
+        cake: "happy-birthday-cake-png-free_3aK.WEBP"
+      },
+      { 
+        name: "ram", 
+        dob: "2007-09-", 
+        photo: "ram.jpg", 
+        message: "Happy Birthday ram 🎉 Wishing you lots of smiles and happiness!",
+        bg: "ram-bg.jpg",
+        gallery: ["ram1.jpg","ram2.jpg","ram3.jpg","ram4.jpg","ram5.jpg"],
+        bottom: "💖 ram, may all your dreams sparkle into reality 💖",
+        song: "songs/lucy-song.mp3",
+        password: "ram007",
+        cake: "cake-ram.png"
+      },
+      { 
+        name: "abhishek singh", 
+        dob: "2004-04-10", 
+        photo: "abishek.jpg", 
+        message: "May your day be filled with joy, love, and endless surprises! 🎈🎁",
+        bg: "abhishek-bg.jpg",
+        gallery: ["abhishek1.jpg","abhishek2.jpg","abhishek3.jpg","abhishek4.jpg","abhishek5.jpg"],
+        bottom: "✨ abhishek, may this year be your best one yet! Keep shining ✨",
+        song: "happy-birthday-254480.mp3",
+        password: "abhi2004",
+        cake: "cake-abhishek.png"
+      }
+    ];
+
+    let currentPerson = null;
+
+    checkBtn.addEventListener("click", () => {
+      const name = document.getElementById("name").value.trim();
+      const dob = document.getElementById("dob").value;
+
+      const person = birthdays.find(p => p.name.toLowerCase() === name.toLowerCase() && p.dob === dob);
+
+      if (person) {
+        currentPerson = person;
+        document.querySelector(".form-box").style.display = "none";
+        surpriseBox.style.display = "block";
+
+        wish.textContent = `🎉 Happy Birthday ${person.name}! 🎉`;
+        photo.src = person.photo;
+        message.textContent = person.message;
+
+        launchConfetti();
+      } else {
+        errorMsg.textContent = "❌ Wrong Name or Date of Birth!";
+      }
+    });
+
+    document.getElementById("giftBox").addEventListener("click", () => {
+      if (!currentPerson) return;
+      passInput.value = "";
+      passError.textContent = "";
+      passModal.style.display = "flex";
+    });
+
+    submitPass.addEventListener("click", () => {
+      if (passInput.value.trim() === currentPerson.password) {
+        passModal.style.display = "none";
+        openSurprise();
+      } else {
+        passError.textContent = "❌ Wrong password!";
+      }
+    });
+
+    function openSurprise() {
+      surpriseBox.style.display = "none";
+      birthdayScreen.style.display = "flex";
+      birthdayScreen.style.backgroundImage = `url(${currentPerson.bg})`;
+      finalWish.textContent = `🎂 Happy Birthday ${currentPerson.name} 🎉`;
+
+      bottomMessage.textContent = currentPerson.bottom;
+
+      circle.innerHTML = "";
+      const total = currentPerson.gallery.length;
+      const angle = 360 / total;
+      currentPerson.gallery.forEach((src, i) => {
+        let img = document.createElement("img");
+        img.src = src;
+        img.style.transform = `rotateY(${i * angle}deg) translateZ(200px)`;
+        circle.appendChild(img);
+      });
+
+      circle.querySelectorAll("img").forEach(img => {
+        img.addEventListener("click", () => {
+          modal.style.display = "flex";
+          modalImg.src = img.src;
+        });
+      });
+
+      // Cake above bottomMessage
+      let cakeImg = document.createElement("img");
+      cakeImg.src = currentPerson.cake;
+      cakeImg.alt = "Birthday Cake";
+      cakeImg.classList.add("cake");
+      birthdayScreen.insertBefore(cakeImg, bottomMessage);
+
+      music.src = currentPerson.song;
+      music.play();
+
+      launchConfetti();
+    }
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+      birthdayScreen.style.display = "none";
+      surpriseBox.style.display = "block";
+      music.pause();
+      const cake = birthdayScreen.querySelector(".cake");
+      if (cake) cake.remove();
+    });
+
+    document.getElementById("backBtn1").addEventListener("click", () => {
+      surpriseBox.style.display = "none";
+      document.querySelector(".form-box").style.display = "block";
+    });
+
+    closeModal.addEventListener("click", () => modal.style.display = "none");
+    modal.addEventListener("click", (e) => { if(e.target === modal) modal.style.display = "none"; });
+    closePass.addEventListener("click", () => passModal.style.display = "none");
+
+    function launchConfetti() {
+      confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+    }
+  </script>
+
+</body>
+</html>
